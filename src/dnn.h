@@ -20,7 +20,7 @@
 #define __DNN_H__
 
 #include "nn.h"
-#include "dnn_weights.h"
+#include "weights.h"
 #include "arm_nnfunctions.h"
 #include "arm_math.h"
 
@@ -28,33 +28,34 @@
 
   10x25 input features
     |
-   IP1 : Innerproduct (weights: 250x144)
+   IP1 : Innerproduct (weights: 250x32)
     |
-   IP2 : Innerproduct (weights: 144x144)
+   IP2 : Innerproduct (weights: 32x32)
     |
-   IP3 : Innerproduct (weights: 144x144)
+   IP3 : Innerproduct (weights: 32x32)
     |
-   IP4 : Innerproduct (weights: 144x12)
+   IP4 : Innerproduct (weights: 32x6)
     |
    12 outputs
 
 */
 
 #define SAMP_FREQ 16000
-#define MFCC_DEC_BITS 2
-#define FRAME_SHIFT_MS 40
+#define MFCC_DEC_BITS 2 
+#define FRAME_SHIFT_MS 32
 #define FRAME_SHIFT ((int16_t)(SAMP_FREQ * 0.001 * FRAME_SHIFT_MS))
-#define NUM_FRAMES 25
+#define NUM_FRAMES 31 // 1000/32
 #define NUM_MFCC_COEFFS 10
 #define MFCC_BUFFER_SIZE (NUM_FRAMES*NUM_MFCC_COEFFS)
-#define FRAME_LEN_MS 40
+#define FRAME_LEN_MS 32
 #define FRAME_LEN ((int16_t)(SAMP_FREQ * 0.001 * FRAME_LEN_MS))
 
 #define IN_DIM (NUM_FRAMES*NUM_MFCC_COEFFS)
-#define OUT_DIM 12
-#define IP1_OUT_DIM 144
-#define IP2_OUT_DIM 144
-#define IP3_OUT_DIM 144
+// only classify 4 words + silence + unknown
+#define OUT_DIM 6
+#define IP1_OUT_DIM 48
+#define IP2_OUT_DIM 48
+#define IP3_OUT_DIM 48
 #define IP1_WT_DIM (IP1_OUT_DIM*IN_DIM)
 #define IP2_WT_DIM (IP2_OUT_DIM*IP1_OUT_DIM)
 #define IP3_WT_DIM (IP3_OUT_DIM*IP2_OUT_DIM)

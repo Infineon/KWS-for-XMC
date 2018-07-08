@@ -27,22 +27,26 @@ KWS::~KWS()
 {
     delete mfcc_buffer;
 }
+KWS::KWS(){}
 
-KWS::KWS(SignalInput *signalInput, int numRecordingWindow)
+KWS::KWS(SignalInput *signalInput, int numRecordingWindow, int slidingWindowLen)
+    : num_recording_win(numRecordingWindow), sliding_window_len(slidingWindowLen)
 {
+    // these values must correspond to the network
     num_mfcc_features = NUM_MFCC_COEFFS;
     frame_len = FRAME_LEN;
     num_frames = NUM_FRAMES;
-    frame_shift = FRAME_SHIFT;
-    num_recording_win = numRecordingWindow;
+    // frame_shift = FRAME_SHIFT;
     num_out_classes = OUT_DIM;
-    
-    mfcc = new MFCC(FRAME_LEN, num_mfcc_features);
+
+    mfcc = new MFCC(frame_len, num_mfcc_features, MFCC_DEC_BITS);
     mfcc->input(signalInput);
     mfcc_buffer = new q7_t[num_frames * num_mfcc_features];
 
     dnn = new DNN();
     output = new q7_t[num_out_classes];
+    averaged_output = new q7_t[num_out_classes];
+    predictions = new q7_t[sliding_window_len * num_out_classes];
 }
 
 void KWS::extract_features()
@@ -54,18 +58,43 @@ void KWS::extract_features()
     }
     //compute features only for the newly recorded audio
     int mfcc_buffer_head = (num_frames - num_recording_win) * num_mfcc_features;
-    Serial.println(mfcc_buffer_head);
-    for (int f = 0; f < 25; f++)
+    for (int f = 0; f < num_recording_win; f++)
     {
         mfcc->getMfccFeatues(mfcc_buffer + mfcc_buffer_head);
         mfcc_buffer_head += num_mfcc_features;
     }
 }
 
-void KWS::classify(){
+void KWS::classify()
+{
     dnn->run_nn(mfcc_buffer, output);
-    arm_softmax_q7(output,num_out_classes,output);
+    output[5] *= 1.5; // strengthen "off"
+    arm_softmax_q7(output, num_out_classes, output);
+
+    //shift right old predictions
+    arm_copy_q7((q7_t *)predictions, (q7_t *)(predictions + num_out_classes), (sliding_window_len - 1) * num_out_classes);
+    //add new predictions
+    arm_copy_q7((q7_t *)output, (q7_t *)predictions, num_out_classes);
+    //compute averages
+    int sum;
+    for (int j = 0; j < num_out_classes; j++)
+    {
+        sum = 0;
+        for (int i = 0; i < sliding_window_len; i++)
+            sum += predictions[i * num_out_classes + j];
+        averaged_output[j] = (q7_t)(sum / sliding_window_len);
+    }
 }
 
-void KWS::average_predictions()
-{}
+int KWS::get_top_class()
+{
+  int max_ind=0;
+  int max_val=-128;
+  for(int i=0;i<num_out_classes;i++) {
+    if(max_val<averaged_output[i]) {
+      max_val = averaged_output[i];
+      max_ind = i;
+    }    
+  }
+  return max_ind;
+}
