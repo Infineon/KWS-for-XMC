@@ -27,7 +27,7 @@ KWS::~KWS()
 {
     delete mfcc_buffer;
 }
-KWS::KWS(){}
+KWS::KWS() {}
 
 KWS::KWS(SignalInput *signalInput, int numRecordingWindow, int slidingWindowLen)
     : num_recording_win(numRecordingWindow), sliding_window_len(slidingWindowLen)
@@ -68,7 +68,6 @@ void KWS::extract_features()
 void KWS::classify()
 {
     dnn->run_nn(mfcc_buffer, output);
-    output[5] *= 1.5; // strengthen "off"
     arm_softmax_q7(output, num_out_classes, output);
 
     //shift right old predictions
@@ -88,13 +87,15 @@ void KWS::classify()
 
 int KWS::get_top_class()
 {
-  int max_ind=0;
-  int max_val=-128;
-  for(int i=0;i<num_out_classes;i++) {
-    if(max_val<averaged_output[i]) {
-      max_val = averaged_output[i];
-      max_ind = i;
-    }    
-  }
-  return max_ind;
+    int max_ind = 0;
+    int max_val = -128;
+    for (int i = 0; i < num_out_classes; i++)
+    {
+        if (max_val < averaged_output[i])
+        {
+            max_val = averaged_output[i];
+            max_ind = i;
+        }
+    }
+    return max_ind;
 }
