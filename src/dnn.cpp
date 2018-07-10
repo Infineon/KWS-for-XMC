@@ -20,21 +20,6 @@
  * Description: Keyword spotting DNN model example code
  */
 
-/* Network Structure 
-
-  10x25 input features
-    |
-   IP1 : Innerproduct (weights: 250x32)
-    |
-   IP2 : Innerproduct (weights: 32x32)
-    |
-   IP3 : Innerproduct (weights: 32x32)
-    |
-   IP4 : Innerproduct (weights: 32x6)
-    |
-   12 outputs
-
-*/
 
 #include "dnn.h"
 

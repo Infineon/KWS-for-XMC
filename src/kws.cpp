@@ -40,7 +40,7 @@ KWS::KWS(SignalInput *signalInput, int numRecordingWindow, int slidingWindowLen)
     num_out_classes = OUT_DIM;
 
     mfcc = new MFCC(frame_len, num_mfcc_features, MFCC_DEC_BITS);
-    mfcc->input(signalInput);
+    mfcc->input(signalInput, SAMP_FREQ);
     mfcc_buffer = new q7_t[num_frames * num_mfcc_features];
 
     dnn = new DNN();

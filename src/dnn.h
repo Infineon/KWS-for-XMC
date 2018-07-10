@@ -28,13 +28,13 @@
 
   10x25 input features
     |
-   IP1 : Innerproduct (weights: 250x32)
+   IP1 : Innerproduct (weights: 250x48)
     |
-   IP2 : Innerproduct (weights: 32x32)
+   IP2 : Innerproduct (weights: 48x48)
     |
-   IP3 : Innerproduct (weights: 32x32)
+   IP3 : Innerproduct (weights: 48x48)
     |
-   IP4 : Innerproduct (weights: 32x6)
+   IP4 : Innerproduct (weights: 48x6)
     |
    12 outputs
 
