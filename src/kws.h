@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018 Arm Limited or its affiliates. All rights reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #ifndef __KWS_H__
 #define __KWS_H__
 
@@ -30,7 +48,8 @@ protected:
   q7_t *output;
   q7_t *predictions;
 
-  int num_frames; // num_frames * num_mfcc_features values are used as nn input
+  // (num_frames * num_mfcc_features) mfcc values are used as nn input
+  int num_frames; 
   int num_mfcc_features;
   int frame_len;
   // no overlapping windows implemented yet
