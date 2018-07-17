@@ -29,5 +29,10 @@ Neural networks are the current state-of-art in language recognition.
 At the time of writing, this repository uses a 3-layer fully connected neural network. In the network used, each layer has 48 neurons. This small network is trained to recognize four words: left, right, on and off. After quantization, the accuracy of training, validation and test is 93.00%, 89.75% and 88.73% respectively.
 
 # Limitations
+`KWS::extract_features()` and `kws->classify()` should be syncronized with the speed of I2S sample reading. `KWS::extract_features()` seems to be the bottleneck in speed, i.e., with `KWS::extract_features()` per I2S callback some audio samples will be lost. Ideally all the computation for feature extraction should be done in time shorter than filling the I2S buffer. 
+
+A counter can be used in the `XMCI2SClass::onSampleReceived()` in order to check the number of received samples.
 
 # TODO
+
+Ideally the audio input should be read via DMA (P2M) with a double buffer. However we used interrupts for sample reading since the DMA library is still in development stage. This might have caused some inacurracy. 
