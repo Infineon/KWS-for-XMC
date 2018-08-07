@@ -29,8 +29,8 @@ KWS::~KWS()
 }
 KWS::KWS() {}
 
-KWS::KWS(SignalInput *signalInput, int numRecordingWindow, int slidingWindowLen)
-    : num_recording_win(numRecordingWindow), sliding_window_len(slidingWindowLen)
+KWS::KWS(SignalInput *signalInput, int slidingWindowLen)
+    : sliding_window_len(slidingWindowLen)
 {
     // these values must correspond to the network
     num_mfcc_features = NUM_MFCC_COEFFS;
@@ -51,14 +51,14 @@ KWS::KWS(SignalInput *signalInput, int numRecordingWindow, int slidingWindowLen)
 
 void KWS::extract_features()
 {
-    if (num_frames > num_recording_win)
+    if (num_frames > SINGLE_RECORDING_WINDOW)
     {
         //move old features left
-        memmove(mfcc_buffer, mfcc_buffer + (num_recording_win * num_mfcc_features), (num_frames - num_recording_win) * num_mfcc_features);
+        memmove(mfcc_buffer, mfcc_buffer + (SINGLE_RECORDING_WINDOW * num_mfcc_features), (num_frames - SINGLE_RECORDING_WINDOW) * num_mfcc_features);
     }
     //compute features only for the newly recorded audio
-    int mfcc_buffer_head = (num_frames - num_recording_win) * num_mfcc_features;
-    for (int f = 0; f < num_recording_win; f++)
+    int mfcc_buffer_head = (num_frames - SINGLE_RECORDING_WINDOW) * num_mfcc_features;
+    for (int f = 0; f < SINGLE_RECORDING_WINDOW; f++)
     {
         mfcc->getMfccFeatues(mfcc_buffer + mfcc_buffer_head);
         mfcc_buffer_head += num_mfcc_features;

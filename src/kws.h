@@ -20,16 +20,16 @@
 #define __KWS_H__
 
 #include <MFCC.h>
-#include "dnn.h"
+#include "dnn/dnn.h"
 
+#define SINGLE_RECORDING_WINDOW 1
 class KWS
 {
-
 public:
   KWS();
   ~KWS();
   // if default variables unmodified it is assumed that the input signal is static
-  KWS(SignalInput *signalInput, int numRecordingWindow = NUM_FRAMES, int slidingWindowLen = 1);
+  KWS(SignalInput *signalInput, int slidingWindowLen = 1);
   void extract_features();
   void classify();
   int get_top_class();
@@ -52,6 +52,7 @@ protected:
   int num_frames; 
   int num_mfcc_features;
   int frame_len;
+
   // no overlapping windows implemented yet
   // int frame_shift;
   int num_out_classes;
