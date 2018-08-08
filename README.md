@@ -35,4 +35,4 @@ A counter can be used in the `XMCI2SClass::onSampleReceived()` in order to check
 
 # TODO
 
-Ideally the audio input should be read via DMA (P2M) with a double buffer. However we used interrupts for sample reading since the DMA library is still in development stage. This might have caused some inacurracy. 
+Ideally the audio input should be read via DMA (P2M) with a double buffer. However we used interrupts for sample reading since the DMA library is still in development stage. This might have caused some inacurracy. # KWS-for-XMC
