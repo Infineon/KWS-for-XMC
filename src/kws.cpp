@@ -65,6 +65,17 @@ void KWS::extract_features()
     }
 }
 
+void KWS::extract_features_static()
+{
+    int mfcc_buffer_head = 0;
+    for (int f = 0; f < NUM_FRAMES; f++)
+    {
+        mfcc->getMfccFeatues(mfcc_buffer + mfcc_buffer_head);
+        mfcc_buffer_head += num_mfcc_features;
+    }
+}
+
+
 void KWS::classify()
 {
     dnn->run_nn(mfcc_buffer, output);

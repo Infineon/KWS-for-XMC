@@ -31,6 +31,8 @@ public:
   // if default variables unmodified it is assumed that the input signal is static
   KWS(SignalInput *signalInput, int slidingWindowLen = 1);
   void extract_features();
+  void extract_features_static();
+  
   void classify();
   int get_top_class();
 

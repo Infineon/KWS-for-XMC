@@ -14,7 +14,7 @@ void setup()
   staticAudioInput audioInput(audio_buffer, AUDIO_LENGTH);
 
   KWS kws(&audioInput);
-  kws.extract_features(); //extract mfcc features
+  kws.extract_features_static(); //extract mfcc features
   kws.classify();         //classify using dnn
   float val;
   for (int i = 0; i < 6; i++)
