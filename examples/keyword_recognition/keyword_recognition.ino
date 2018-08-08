@@ -1,3 +1,7 @@
+#if !defined(XMC4700_Relax_Kit)
+#error "Board might not be compatible"
+#else  
+  
 #include <I2S.h>
 #include "kws.h"
 #define NUM_RECORDING_WINDOW 4
@@ -69,3 +73,4 @@ void loop()
     Serial.println(); */
   }
 }
+#endif

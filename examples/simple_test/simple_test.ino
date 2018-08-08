@@ -1,3 +1,6 @@
+#if !defined(XMC4700_Relax_Kit)
+#error "Board might not be compatible"
+#else  
 char output_class[6][8] = {"Silence", "Unknown", "left", "right", "on", "off"};
 
 #include "staticAudioInput.h"
@@ -30,3 +33,4 @@ void setup()
 }
 
 void loop() {}
+#endif
