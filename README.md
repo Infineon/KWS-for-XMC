@@ -4,6 +4,8 @@ This repository consists of source code and examples demonstratnig how to realiz
 
 Our implementation depends on the core libraries I2S and DSP. The I2S library receives audio input from the microphone, and the DSP library processes the input signal.
 
+**Notice that it has been only tested with the Adafruit MEMS microphone, to make it work with other microphones you will have to adjust the amplitude of the samples**
+
 # Background on Speech Recognition
 
 The speech signal is converted to speech features, which are then used as the input of speech recognition algorithms. There exist many established methods of speech feature extraction, and MFCCs (mel frequency cepstral coefficients) belong to the most commonly used features. 
@@ -35,4 +37,4 @@ A counter can be used in the `XMCI2SClass::onSampleReceived()` in order to check
 
 # TODO
 
-Ideally the audio input should be read via DMA (P2M) with a double buffer. However we used interrupts for sample reading since the DMA library is still in development stage. This might have caused some inacurracy. # KWS-for-XMC
+Ideally the audio input should be read via DMA (P2M) with a double buffer. However we used interrupts for sample reading since the DMA library is still in development stage. This might have caused some inacurracy.
